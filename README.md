@@ -47,14 +47,12 @@ efektif, efisien, dan terdokumentasi dengan baik.
 
 ## Anggota Kelompok
 
-  No   Nama                      NPM
-  ---- ----------------          ----------
-  1    Alya Yumna Faiha          202433500234
-  2    Arsya Aura As Syifa       202433500240
-  3    Afrizal Muhammad Akbar    202433500257
-  4    Sidqi Wildana Syba        202433500261
-  5    Tagam Arlington Sinaga    202433500265
-  6    Anita Cahyani             202433500278
+  1. Alya Yumna Faiha          202433500234
+  2. Arsya Aura As Syifa       202433500240
+  3. Afrizal Muhammad Akbar    202433500257
+  4. Sidqi Wildana Syba        202433500261
+  5. Tagam Arlington Sinaga    202433500265
+  6. Anita Cahyani             202433500278
 
 ## Dosen Pengampu
 
