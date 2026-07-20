@@ -8,38 +8,38 @@ try {
         nisn VARCHAR(20) NOT NULL,
         nama_lengkap VARCHAR(150) NOT NULL,
         kelas VARCHAR(50) NOT NULL,
-        jenis_kelamin ENUM('L', 'P') NOT NULL,
+        jk ENUM('L', 'P') NOT NULL,
         tempat_lahir VARCHAR(100),
-        tanggal_lahir DATE,
+        tgl_lahir DATE,
         nama_wali VARCHAR(150),
         alamat TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
     
     // Auto-migrate (tambahkan kolom jika belum ada dari database sebelumnya)
-    $pdo->exec("ALTER TABLE siswa ADD COLUMN jenis_kelamin ENUM('L', 'P') NULL");
-    $pdo->exec("ALTER TABLE siswa ADD COLUMN tempat_lahir VARCHAR(100) NULL");
-    $pdo->exec("ALTER TABLE siswa ADD COLUMN tanggal_lahir DATE NULL");
-    $pdo->exec("ALTER TABLE siswa ADD COLUMN nama_wali VARCHAR(150) NULL");
-    $pdo->exec("ALTER TABLE siswa ADD COLUMN alamat TEXT NULL");
+    try { $pdo->exec("ALTER TABLE siswa ADD COLUMN jk ENUM('L', 'P') NULL"); } catch (PDOException $e) {}
+    try { $pdo->exec("ALTER TABLE siswa ADD COLUMN tempat_lahir VARCHAR(100) NULL"); } catch (PDOException $e) {}
+    try { $pdo->exec("ALTER TABLE siswa ADD COLUMN tgl_lahir DATE NULL"); } catch (PDOException $e) {}
+    try { $pdo->exec("ALTER TABLE siswa ADD COLUMN nama_wali VARCHAR(150) NULL"); } catch (PDOException $e) {}
+    try { $pdo->exec("ALTER TABLE siswa ADD COLUMN alamat TEXT NULL"); } catch (PDOException $e) {}
 } catch (PDOException $e) {}
 
 // 2. LOGIKA CRUD (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['simpan_siswa'])) {
-        $stmt = $pdo->prepare("INSERT INTO siswa (nisn, nama_lengkap, kelas, jenis_kelamin, tempat_lahir, tanggal_lahir, nama_wali, alamat) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO siswa (nisn, nama_lengkap, kelas, jk, tempat_lahir, tgl_lahir, nama_wali, alamat) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
-            $_POST['nisn'], $_POST['nama_lengkap'], $_POST['kelas'], $_POST['jenis_kelamin'], 
-            $_POST['tempat_lahir'], $_POST['tanggal_lahir'], $_POST['nama_wali'], $_POST['alamat']
+            $_POST['nisn'], $_POST['nama_lengkap'], $_POST['kelas'], $_POST['jk'], 
+            $_POST['tempat_lahir'], $_POST['tgl_lahir'], $_POST['nama_wali'], $_POST['alamat']
         ]);
         header("Location: siswa.php?status=success_add");
         exit;
     }
     elseif (isset($_POST['edit_siswa'])) {
-        $stmt = $pdo->prepare("UPDATE siswa SET nisn=?, nama_lengkap=?, kelas=?, jenis_kelamin=?, tempat_lahir=?, tanggal_lahir=?, nama_wali=?, alamat=? WHERE id=?");
+        $stmt = $pdo->prepare("UPDATE siswa SET nisn=?, nama_lengkap=?, kelas=?, jk=?, tempat_lahir=?, tgl_lahir=?, nama_wali=?, alamat=? WHERE id=?");
         $stmt->execute([
-            $_POST['nisn'], $_POST['nama_lengkap'], $_POST['kelas'], $_POST['jenis_kelamin'], 
-            $_POST['tempat_lahir'], $_POST['tanggal_lahir'], $_POST['nama_wali'], $_POST['alamat'], $_POST['id']
+            $_POST['nisn'], $_POST['nama_lengkap'], $_POST['kelas'], $_POST['jk'], 
+            $_POST['tempat_lahir'], $_POST['tgl_lahir'], $_POST['nama_wali'], $_POST['alamat'], $_POST['id']
         ]);
         header("Location: siswa.php?status=success_edit");
         exit;
@@ -117,7 +117,7 @@ include 'sidebar.php';
                                 <td><?= $no++ ?></td>
                                 <td class="fw-bold text-secondary"><?= htmlspecialchars($row['nisn']) ?></td>
                                 <td class="fw-bold" style="color: #1A2F22;"><?= htmlspecialchars($row['nama_lengkap'] ?? '') ?></td>
-                                <td><?= htmlspecialchars($row['jenis_kelamin'] ?? '-') ?></td>
+                                <td><?= htmlspecialchars($row['jk'] ?? '-') ?></td>
                                 <td><span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1"><?= htmlspecialchars($row['kelas'] ?? '') ?></span></td>
                                 <td><?= htmlspecialchars($row['nama_wali'] ?? '-') ?></td>
                                 <td class="text-center">
@@ -160,7 +160,7 @@ include 'sidebar.php';
                     
                     <div class="col-md-6">
                         <label class="form-label small text-muted mb-1">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="form-select border-0 shadow-sm" required>
+                        <select name="jk" class="form-select border-0 shadow-sm" required>
                             <option value="L">Laki-Laki (L)</option>
                             <option value="P">Perempuan (P)</option>
                         </select>
@@ -179,7 +179,7 @@ include 'sidebar.php';
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small text-muted mb-1">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control border-0 shadow-sm">
+                        <input type="date" name="tgl_lahir" class="form-control border-0 shadow-sm">
                     </div>
 
                     <div class="col-md-12">
@@ -223,7 +223,7 @@ include 'sidebar.php';
                     
                     <div class="col-md-6">
                         <label class="form-label small text-muted mb-1">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" id="edit_jk" class="form-select border-0 shadow-sm" required>
+                        <select name="jk" id="edit_jk" class="form-select border-0 shadow-sm" required>
                             <option value="L">Laki-Laki (L)</option>
                             <option value="P">Perempuan (P)</option>
                         </select>
@@ -242,7 +242,7 @@ include 'sidebar.php';
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small text-muted mb-1">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" id="edit_tgl" class="form-control border-0 shadow-sm">
+                        <input type="date" name="tgl_lahir" id="edit_tgl" class="form-control border-0 shadow-sm">
                     </div>
 
                     <div class="col-md-12">
@@ -269,10 +269,10 @@ include 'sidebar.php';
         document.getElementById('edit_id').value = data.id || '';
         document.getElementById('edit_nisn').value = data.nisn || '';
         document.getElementById('edit_nama').value = data.nama_lengkap || '';
-        document.getElementById('edit_jk').value = data.jenis_kelamin || 'L';
+        document.getElementById('edit_jk').value = data.jk || 'L';
         document.getElementById('edit_kelas').value = data.kelas || 'A';
         document.getElementById('edit_tempat').value = data.tempat_lahir || '';
-        document.getElementById('edit_tgl').value = data.tanggal_lahir || '';
+        document.getElementById('edit_tgl').value = data.tgl_lahir || '';
         document.getElementById('edit_wali').value = data.nama_wali || '';
         document.getElementById('edit_alamat').value = data.alamat || '';
         
