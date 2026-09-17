@@ -24,8 +24,8 @@ if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'applica
 require_once 'koneksi.php';
 
 // Konfigurasi API Midtrans Sandbox
-$midtrans_client_key = "Mid-client-pDcnfKIjDCBqRo7L";
-$midtrans_server_key = "Mid-server-Ayrn0yFRjoDrDsf77JV0ZV3t";
+$midtrans_client_key = "Mid-client-XXXXXXXX";
+$midtrans_server_key = "Mid-server-XXXXXXXXXXXX";
 
 // ==============================================================================
 // 2. SETUP DATABASE SPP
